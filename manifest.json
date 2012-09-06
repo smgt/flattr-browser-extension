@@ -7,8 +7,8 @@
       "scripts": ["util.js", "background.js"]
   },
   "page_action": {
-    "default_icon": "icon_128.png",
-    "default_title": "Flattr this!"
+    "default_icon": "icon_19_grey.png",
+    "default_title": "Not flattrable!"
   },
   "content_scripts": [
     {
