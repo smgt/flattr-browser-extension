@@ -6,6 +6,7 @@ var flattrable = undefined;
 // Listen for any changes to the URL of any tab. If URL
 // exists, we show our extension icon in the address field.
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+  console.log("tab changed");
     lookupUrl = undefined;
     chrome.pageAction.show(tabId);
 
@@ -61,4 +62,15 @@ chrome.pageAction.onClicked.addListener(function (tab) {
     } else {
       return false;
     }
+});
+
+chrome.extension.onConnect.addListener(function(port) {
+    console.assert(port.name == "flattr");
+    port.onMessage.addListener(function(msg) {
+      if( msg.url ) {
+        window.open('https://flattr.com/submit/auto?url=' + escape(msg.url));
+      } else {
+        console.log("Error, url in message is missing");
+      }
+    });
 });

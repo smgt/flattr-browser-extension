@@ -1,19 +1,23 @@
 {
   "name": "Flattr",
-  "version": "0.8.5",
+  "version": "0.9.0",
   "manifest_version": 2,
-  "description": "Displays a flattr button for Wikipedia and other popular sites that do not have flattr buttons visible",
+  "description": "Displays Flattr buttons on services like Wikipedia, Twitter, Github  and other popular sites that do not have Flattr buttons visible yet.",
   "background": {
-      "scripts": ["util.js", "background.js"]
+      "scripts": ["data/shared/util.js", "data/chrome/background.js"]
   },
   "page_action": {
-    "default_icon": "icon_19_grey.png",
+    "default_icon": "data/images/icon_19_grey.png",
     "default_title": "Not flattrable!"
   },
   "content_scripts": [
     {
-      "matches": ["*://*/*"],
-      "js": ["contentscript.js"]
+      "js": ["data/chrome/contentscript.js", "data/shared/jquery-1.8.1.min.js"],
+      "matches": ["http://*/*", "https://*/*"]
+    },
+    {
+      "js": [ "data/shared/flattr-twitter.js" ],
+      "matches": ["http://*.twitter.com/*", "https://*.twitter.com/*"]
     }
   ],
   "permissions": [
@@ -21,15 +25,16 @@
     "https://api.flattr.com/"
   ],
   "icons": {
-    "16": "favicon.ico",
-    "48": "icon_48.png",
-    "128": "icon_128.png"
+    "16": "data/images/favicon.ico",
+    "48": "data/images/icon_48.png",
+    "128": "data/images/icon_128.png"
   },
   "intents": {
     "http://webintents.org/share" : {
       "type" : ["text/uri-list"],
-      "path" : "intent.html",
+      "path" : "data/chrome/intent.html",
       "title" : "Share link to Flattr"
     }
-  }
+  },
+  "web_accessible_resources": ["data/images/flattr-twitter-icons.png"]
 }
