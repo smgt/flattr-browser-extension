@@ -6,13 +6,10 @@ var flattrable = undefined;
 // Listen for any changes to the URL of any tab. If URL
 // exists, we show our extension icon in the address field.
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-  console.log("tab changed");
     lookupUrl = undefined;
-    chrome.pageAction.show(tabId);
 
     if (isWikipedia(tab.url)) {
         lookupUrl = createWikipediaAutoSubmitUrl(tab.url, tab.title);
-        chrome.pageAction.show(tabId);
     } else {
         showFlattrButtonIfThingExistsForUrl(tab.url, tabId, function(url) {
             lookupUrl = url;
@@ -25,17 +22,18 @@ function showFlattrButtonIfThingExistsForUrl(urlToTest, tabId, callback) {
         var url;
 
         if (thing.message === 'flattrable') {
-            url = 'https://flattr.com/submit/auto?url=' + escape(urlToTest);
+            url = autosubmitURL({url:urlToTest});
         } else if (thing) {
             url = thing.link;
         }
 
         if (url) {
             flattrable = true;
-            chrome.pageAction.setIcon({path:"icon_19.png", tabId:tabId})
+            chrome.pageAction.setIcon({path:"data/images/icon_19.png", tabId:tabId})
             chrome.tabs.get(tabId, function(tab) {
               chrome.pageAction.setTitle({tabId:tab.id, title:'Flattr "'+tab.title+'"'});
             });
+            chrome.pageAction.show(tabId);
             callback(url);
         }
     });
@@ -58,7 +56,9 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
 // thing page in a new tab/window.
 chrome.pageAction.onClicked.addListener(function (tab) {
     if(flattrable) {
-      window.open(lookupUrl || relPaymentLink || canonicalUrl);
+      chrome.tabs.create({
+        url: (lookupUrl || relPaymentLink || canonicalUrl)
+      });
     } else {
       return false;
     }
@@ -68,7 +68,11 @@ chrome.extension.onConnect.addListener(function(port) {
     console.assert(port.name == "flattr");
     port.onMessage.addListener(function(msg) {
       if( msg.url ) {
-        window.open('https://flattr.com/submit/auto?url=' + escape(msg.url));
+
+        chrome.tabs.create({
+          url:autosubmitURL({url:msg.url})
+        });
+
       } else {
         console.log("Error, url in message is missing");
       }

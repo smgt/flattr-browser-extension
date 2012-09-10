@@ -29,27 +29,90 @@ function getFlattrLangCodeForWikipediaUrl(url) {
 }
 
 function createWikipediaAutoSubmitUrl(url, title) {
-    return "https://flattr.com/submit/auto?user_id=WikimediaFoundation&url=" + encodeURIComponent(url) + "&title=" + encodeURIComponent(title) + "&language=" + getFlattrLangCodeForWikipediaUrl(url) + "&tags=wikipedia,article&hidden=0&category=text";
+    return autosubmitURL({
+      url: url,
+      user: "WikimediaFoundation",
+      title: title,
+      language: getFlattrLangCodeForWikipediaUrl(url),
+      tags: new Array("wikipedia", "article"),
+      hidden: false,
+      category: "text"
+    });
 }
 
 function isWikipedia(url) {
     return url.match("(http|https)://(.*\.)?(wikipedia.org)");
 }
 
-function findFlattrThingForUrl(url, callback) {
-    var xhr = new XMLHttpRequest(),
-        lookupUrl = 'https://api.flattr.com/rest/v2/things/lookup?q=' + encodeURIComponent(url);
+var autosubmitURL = function(data) {
+  var baseURL = "https://flattr.com/submit/auto";
+  var params = [];
 
-    xhr.open("GET", lookupUrl, true); // HEAD makes a 400 Bad Request...
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4 && xhr.status == 200 || xhr.status == 304) {
-            var response = JSON.parse(xhr.responseText);
-            if (response.message !== "not_found") {
-                callback(response);
-            } else {
-                callback(false);
-            }
-        }
-    };
-    xhr.send();
+  if(data.url) {
+    params.push("url="+encodeURIComponent(data.url));
+  } else {
+    throw "URL parameter is missing";
+  }
+
+  if(data.user) {
+    params.push("user_id="+encodeURIComponent(data.user));
+  }
+
+  if(data.title) {
+    params.push("title="+encodeURIComponent(data.title));
+  }
+
+  if(data.language) {
+    params.push("language="+encodeURIComponent(data.language));
+  }
+
+  if(data.tags) {
+    var tags;
+    if(Array.isArray(data.tags)) {
+      tags = data.tags.join(",");
+    } else {
+      tags = data.tags;
+    }
+
+    params.push("tags="+encodeURIComponent(tags));
+  }
+
+  if(data.hidden) {
+    var hidden = 0;
+    if(data.hidden === true || data.hidden === 1) {
+      hidden = 1;
+    } else if (data.hidden === false || data.hidden === 0) {
+      hidden = 0;
+    }
+
+    params.push("hidden="+encodeURIComponent(hidden));
+  }
+
+  if(data.category) {
+    params.push("category="+encodeURIComponent(category));
+  }
+
+  return baseURL + "?" + params.join("&");
+}
+
+function findFlattrThingForUrl(url, callback) {
+    if(typeof url === "string" && url.match(/^https?:\/\//)) {
+      var xhr = new XMLHttpRequest(),
+          lookupUrl = 'https://api.flattr.com/rest/v2/things/lookup?q=' + encodeURIComponent(url);
+
+      xhr.open("GET", lookupUrl, true); // HEAD makes a 400 Bad Request...
+      xhr.onreadystatechange = function() {
+          if (xhr.readyState == 4 && xhr.status == 200 || xhr.status == 304) {
+              var response = JSON.parse(xhr.responseText);
+              if (response.message !== "not_found") {
+                  callback(response);
+              } else {
+                  callback(false);
+              }
+          }
+      };
+      xhr.send();
+    } else {
+      throw "URL is not a valid Flattr url";
+    }
 }

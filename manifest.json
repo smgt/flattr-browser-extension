@@ -13,11 +13,16 @@
   "content_scripts": [
     {
       "js": ["data/chrome/contentscript.js", "data/shared/jquery-1.8.1.min.js"],
-      "matches": ["http://*/*", "https://*/*"]
+      "matches": ["http://*/*", "https://*/*"],
+      "exclude_matches": ["http://flattr.com/*", "https://flattr.com/*", "http://*.flattr.com/*", "https://*.flattr.com/*", "http://*.flattr.net/*", "https://*.flattr.net/*"]
     },
     {
       "js": [ "data/shared/flattr-twitter.js" ],
       "matches": ["http://*.twitter.com/*", "https://*.twitter.com/*"]
+    },
+    {
+      "js": [ "data/shared/util.js", "data/shared/flattr-github.js" ],
+      "matches": ["http://*.github.com/*", "https://*.github.com/*"]
     }
   ],
   "permissions": [
