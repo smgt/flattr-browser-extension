@@ -1,7 +1,5 @@
-Open Source Day Flattr Chrome Extension
-=======================================
+# Flattr Browser Extension
 
-This extension for Google Chrome displays a Flattr icon in the address field when the website you are on can be flattred. Clicking the icon takes you to the thing page on flattr.com!
 
 Testing
 -------
