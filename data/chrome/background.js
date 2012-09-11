@@ -16,15 +16,21 @@ if(!localStorage.getItem("flattr.options")) {
 // Listen for any changes to the URL of any tab. If URL
 // exists, we show our extension icon in the address field.
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+  if(changeInfo.status === "complete" && tab && tab.url && tab.url.match(/^https?:\/\//)) {
     lookupUrl = undefined;
 
-    if (isWikipedia(tab.url)) {
-        lookupUrl = createWikipediaAutoSubmitUrl(tab.url, tab.title);
+    if (Wikipedia.validURL(tab.url)) {
+      flattrable = true;
+      lookupUrl = Wikipedia.autosubmitURL(tab.url, tab.title);
+      chrome.pageAction.show(tabId);
+      console.log(tabId+" lookupUrl: "+lookupUrl);
     } else {
-        showFlattrButtonIfThingExistsForUrl(tab.url, tabId, function(url) {
-            lookupUrl = url;
-        });
+      showFlattrButtonIfThingExistsForUrl(tab.url, tabId, function(url) {
+        lookupUrl = url;
+        console.log(tabId+" lookupUrl: "+lookupUrl);
+      });
     }
+  }
 });
 
 function showFlattrButtonIfThingExistsForUrl(urlToTest, tabId, callback) {
