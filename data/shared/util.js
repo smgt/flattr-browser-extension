@@ -116,3 +116,13 @@ function findFlattrThingForUrl(url, callback) {
       throw "URL is not a valid Flattr url";
     }
 }
+
+var Flattr = {
+  serviceEnabled: function(service) {
+    if(localStorage.getItem("flattr.option.service-"+service) === "service-"+service) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+}

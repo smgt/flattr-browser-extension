@@ -134,6 +134,13 @@
     }
   };
 
-  insertButtons();
+  port.onMessage.addListener(function(msg) {
+    if(msg.flattr_options) {
+      if(msg.flattr_options['flattr.option.service-github'] === "service-github") {
+        console.log("inserting github buttons");
+        insertButtons();
+      }
+    }
+  });
 
 })();

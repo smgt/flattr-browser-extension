@@ -3,6 +3,16 @@ var relPaymentLink = undefined;
 var canonicalUrl = undefined;
 var flattrable = undefined;
 
+// Enable all the options in localstorage
+if(!localStorage.getItem("flattr.options")) {
+  localStorage.setItem("flattr.options", true);
+  $.get("options.html", function(data){
+    $("input[type=checkbox]", data).each(function(item) {
+      localStorage.setItem("flattr.option."+this.getAttribute("id"), this.getAttribute("id"));
+    });
+  });
+}
+
 // Listen for any changes to the URL of any tab. If URL
 // exists, we show our extension icon in the address field.
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
@@ -66,6 +76,7 @@ chrome.pageAction.onClicked.addListener(function (tab) {
 
 chrome.extension.onConnect.addListener(function(port) {
     console.assert(port.name == "flattr");
+    port.postMessage({flattr_options: localStorage});
     port.onMessage.addListener(function(msg) {
       if( msg.url ) {
 

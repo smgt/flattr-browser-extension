@@ -246,6 +246,13 @@
     setTimeout(flattrTwitter,500);
   };
 
-  twitterLoop();
+  port.onMessage.addListener(function(msg) {
+    if(msg.flattr_options) {
+      if(msg.flattr_options['flattr.option.service-twitter'] === "service-twitter") {
+        console.log("Starting twitter loop");
+        twitterLoop();
+      }
+    }
+  });
 
 }());
