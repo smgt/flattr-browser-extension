@@ -34,13 +34,13 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 });
 
 function showFlattrButtonIfThingExistsForUrl(urlToTest, tabId, callback) {
-    findFlattrThingForUrl(urlToTest, function(thing) {
+    Flattr.lookupURL(urlToTest, function(response) {
         var url;
 
-        if (thing.message === 'flattrable') {
-            url = autosubmitURL({url:urlToTest});
-        } else if (thing) {
-            url = thing.link;
+        if (response.message === 'flattrable') {
+            url = Flattr.autosubmitURL({url:urlToTest});
+        } else if (response && response.link) {
+            url = response.link;
         }
 
         if (url) {
@@ -90,7 +90,7 @@ chrome.extension.onConnect.addListener(function(port) {
       if( msg.url ) {
 
         chrome.tabs.create({
-          url:autosubmitURL({url:msg.url})
+          url:Flattr.autosubmitURL({url:msg.url})
         });
 
       } else {

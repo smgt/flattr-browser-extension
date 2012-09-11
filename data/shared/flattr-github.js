@@ -54,7 +54,7 @@
                   count.setAttribute("target", "_blank");
                 } else {
                   count.innerHTML = 0;
-                  count.setAttribute("href", autosubmitURL({url:window.location.href}));
+                  count.setAttribute("href", Flattr.autosubmitURL({url:window.location.href}));
                 }
                 $(li).append(count);
               }
