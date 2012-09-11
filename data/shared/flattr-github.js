@@ -23,7 +23,7 @@
       name: "repository",
       text: "Flattr",
       container: ".repohead .pagehead-actions",
-      after: '.subscription',
+      append: true,
       className: 'flattr-action',
       selector: '.flattr-action',
       create: function(btnConfig) {
@@ -60,9 +60,6 @@
               }
           });
         }
-
-
-
         return li;
       },
       data: function (elem) {
@@ -74,7 +71,7 @@
       name: "repository",
       text: "Flattr",
       container: ".pagehead.userpage .pagehead-actions",
-      after: '',
+      append: true,
       className: 'flattr-action',
       selector: '.flattr-action',
       create: function(btnConfig) {
@@ -110,8 +107,14 @@
 
         if(btnConfig.after) {
           $(container).find(btnConfig.after).after(btn);
-        } else {
+        } else if (btnConfig.before) {
+          $(container).find(btnConfig.before).before(btn);
+        } else if (btnConfig.append) {
+          $(container).append(btn);
+        } else if (btnConfig.prepend) {
           $(container).prepend(btn);
+        } else {
+          throw "You need to add your button to a element to make it visible"
         }
 
         var getData = btnConfig.data;
