@@ -42,6 +42,7 @@ function pageActionShow(tabId) {
 function showFlattrButtonIfThingExistsForUrl(urlToTest, tabId, callback) {
 
     if(!urlToTest.match(/^https?:\/\//)) return;
+    if(urlToTest.match(/^https?:\/\/(?:\w+\.)?flattr.com\/?/)) return;
 
     Flattr.lookupURL(urlToTest, function(response) {
         var url;
