@@ -45,7 +45,7 @@ function showFlattrButtonIfThingExistsForUrl(urlToTest, tabId, callback) {
 
         if (url) {
             flattrable = true;
-            chrome.pageAction.setIcon({path:"data/images/icon_19.png", tabId:tabId})
+            chrome.pageAction.setIcon({path:"../images/icon_19.png", tabId:tabId})
             chrome.tabs.get(tabId, function(tab) {
               chrome.pageAction.setTitle({tabId:tab.id, title:'Flattr "'+tab.title+'"'});
             });
