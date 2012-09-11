@@ -15,6 +15,12 @@ var Options = {
   },
   toggle: function(elem) {
     var serviceId = elem.getAttribute('id');
+    var alert = document.getElementById('alert-box');
+    alert.style.display = "block";
+    window.setTimeout(function(alert) {
+      console.log(alert);
+      alert.style.display = "none";
+    }, 1000, alert);
     if(localStorage.getItem('flattr.option.'+serviceId) === serviceId) {
       Options.disable(elem);
     } else {
