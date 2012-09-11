@@ -22,18 +22,27 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     if (Wikipedia.validURL(tab.url)) {
       flattrable = true;
       lookupUrl = Wikipedia.autosubmitURL(tab.url, tab.title);
-      chrome.pageAction.show(tabId);
-      console.log(tabId+" lookupUrl: "+lookupUrl);
+      pageActionShow(tabId);
     } else {
       showFlattrButtonIfThingExistsForUrl(tab.url, tabId, function(url) {
         lookupUrl = url;
-        console.log(tabId+" lookupUrl: "+lookupUrl);
       });
     }
   }
 });
 
+function pageActionShow(tabId) {
+  chrome.pageAction.setIcon({path:"../images/icon_19.png", tabId:tabId})
+  chrome.tabs.get(tabId, function(tab) {
+    chrome.pageAction.setTitle({tabId:tab.id, title:'Flattr "'+tab.title+'"'});
+  });
+  chrome.pageAction.show(tabId);
+}
+
 function showFlattrButtonIfThingExistsForUrl(urlToTest, tabId, callback) {
+
+    if(!urlToTest.match(/^https?:\/\//)) return;
+
     Flattr.lookupURL(urlToTest, function(response) {
         var url;
 
@@ -45,28 +54,11 @@ function showFlattrButtonIfThingExistsForUrl(urlToTest, tabId, callback) {
 
         if (url) {
             flattrable = true;
-            chrome.pageAction.setIcon({path:"../images/icon_19.png", tabId:tabId})
-            chrome.tabs.get(tabId, function(tab) {
-              chrome.pageAction.setTitle({tabId:tab.id, title:'Flattr "'+tab.title+'"'});
-            });
-            chrome.pageAction.show(tabId);
+            pageActionShow(tabId);
             callback(url);
         }
     });
 }
-
-// See if contentscript.js finds a rel payment link or canonical url. 
-// Use these if the regular flattr API lookup does not find a matching thing.
-chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
-    if (request.relPaymentLink) {
-        relPaymentLink = request.relPaymentLink;
-        chrome.pageAction.show(sender.tab.id);
-    } else if (request.canonicalUrl) {
-        showFlattrButtonIfThingExistsForUrl(request.canonicalUrl, sender.tab.id, function(url) {
-            canonicalUrl = url;
-        });
-    }
-});
 
 // When the icon in address field is clicked, we open the flattr.com
 // thing page in a new tab/window.
@@ -84,17 +76,28 @@ chrome.extension.onConnect.addListener(function(port) {
 
     if(port.name !== "flattr") return;
 
+    // Send settings to content scripts
     port.postMessage({flattr_options: localStorage});
 
-    port.onMessage.addListener(function(msg) {
+    // Wait for a URL from a contentscript
+    port.onMessage.addListener(function(msg, port) {
       if( msg.url ) {
-
         chrome.tabs.create({
           url:Flattr.autosubmitURL({url:msg.url})
         });
-
-      } else {
-        console.log("Error, url in message is missing");
+      } else if (msg.relPaymentLink) {
+        if(port.sender.tab) {
+          relPaymentLink = msg.relPaymentLink;
+          flattrable = true;
+          pageActionShow(port.sender.tab.id);
+        }
+      } else if (msg.canonicalUrl) {
+        if(port.sender.tab) {
+          showFlattrButtonIfThingExistsForUrl(msg.canonicalUrl, port.sender.tab.id, function(url) {
+              canonicalUrl = url;
+          });
+        }
       }
     });
+
 });

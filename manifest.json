@@ -13,7 +13,7 @@
   },
   "content_scripts": [
     {
-      "js": ["data/chrome/contentscript.js", "data/shared/jquery-1.8.1.min.js", "data/shared/util.js"],
+      "js": [ "data/shared/jquery-1.8.1.min.js", "data/shared/util.js", "data/chrome/contentscript.js" ],
       "matches": ["http://*/*", "https://*/*"],
       "exclude_matches": ["http://flattr.com/*", "https://flattr.com/*", "http://*.flattr.com/*", "https://*.flattr.com/*", "http://*.flattr.net/*", "https://*.flattr.net/*"]
     },
