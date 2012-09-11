@@ -76,13 +76,16 @@ chrome.pageAction.onClicked.addListener(function (tab) {
         url: (lookupUrl || relPaymentLink || canonicalUrl)
       });
     } else {
-      return false;
+      return;
     }
 });
 
 chrome.extension.onConnect.addListener(function(port) {
-    console.assert(port.name == "flattr");
+
+    if(port.name !== "flattr") return;
+
     port.postMessage({flattr_options: localStorage});
+
     port.onMessage.addListener(function(msg) {
       if( msg.url ) {
 
