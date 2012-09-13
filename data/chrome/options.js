@@ -14,13 +14,17 @@ var Options = {
     }
   },
   toggle: function(elem) {
-    var serviceId = elem.getAttribute('id');
-    var alert = document.getElementById('alert-box');
-    alert.style.display = "block";
-    window.setTimeout(function(alert) {
+    var container = elem.parentElement;
+    if(container.querySelector("span.label")) return;
+    var serviceId = container.getAttribute('id');
+    var alert = document.createElement("span");
+    alert.className = "label";
+    alert.innerHTML = "Saved...";
+    container.appendChild(alert);
+    window.setTimeout(function(elem, alert) {
       console.log(alert);
-      alert.style.display = "none";
-    }, 1000, alert);
+      elem.removeChild(alert);
+    }, 1000, container, alert);
     if(localStorage.getItem('flattr.option.'+serviceId) === serviceId) {
       Options.disable(elem);
     } else {
