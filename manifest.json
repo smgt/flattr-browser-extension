@@ -4,6 +4,7 @@
   "manifest_version": 2,
   "description": "Displays Flattr buttons on services like Wikipedia, Twitter, Github  and other popular sites that do not have Flattr buttons visible yet.",
   "options_page": "data/chrome/options.html",
+  "update_url": "https://github.com/simon/flattr-browser-extension/raw/master/chrome-update.xml",
   "background": {
     "page": "data/chrome/flattr.html"
   },
