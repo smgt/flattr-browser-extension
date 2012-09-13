@@ -13,6 +13,15 @@ if(!localStorage.getItem("flattr.options")) {
   });
 }
 
+// Check if it's the first time the extension is run
+if(!localStorage.getItem("flattr.first_run")) {
+  localStorage.setItem("flattr.first_run", true);
+  chrome.tabs.create({
+    url: "http://flattr.com/extension/chrome/install",
+    active: true
+  });
+}
+
 // Listen for any changes to the URL of any tab. If URL
 // exists, we show our extension icon in the address field.
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
