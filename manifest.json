@@ -25,6 +25,10 @@
     {
       "js": [ "data/shared/flattr-github.js" ],
       "matches": ["http://*.github.com/*", "https://*.github.com/*"]
+    },
+    {
+      "js": [ "data/shared/flattr-instagram.js" ],
+      "matches": ["http://*.instagram.com/*", "https://*.instagram.com/*"]
     }
   ],
   "permissions": [
@@ -44,5 +48,5 @@
       "title" : "Share link to Flattr"
     }
   },
-  "web_accessible_resources": ["data/images/flattr-twitter-icons.png"]
+  "web_accessible_resources": ["data/images/flattr-twitter-icons.png", "data/images/flattr-instagram.png"]
 }
