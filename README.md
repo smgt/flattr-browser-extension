@@ -1,8 +1,13 @@
 # Flattr Browser Extension
 
+## Test
 
-Testing
--------
+ 1. Go to [extension downloads page](https://github.com/simon/flattr-browser-extension/downloads)
+ 2. Download latest version and save to disk
+ 3. Drag the file into your [chrome extensions page](chrome://chrome/extensions)
+
+
+## Develop
 
  1. Clone this repo.
  2. In Chrome: Tools -> Extensions.
