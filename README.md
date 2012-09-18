@@ -4,7 +4,7 @@
 
  1. Go to [extension downloads page](https://github.com/simon/flattr-browser-extension/downloads)
  2. Download latest version and save to disk
- 3. Drag the file into your [chrome extensions page](chrome://chrome/extensions)
+ 3. Drag the file into your chrome extensions page, **chrome://chrome/extensions/** (I can't link it, Chrome removes the link)
 
 
 ## Develop
