@@ -70,7 +70,7 @@
     {
       name: "repository",
       text: "Flattr",
-      container: ".pagehead.userpage .pagehead-actions",
+      container: "body:not(.org-profile) .pagehead.userpage .pagehead-actions",
       append: true,
       className: 'flattr-action',
       selector: '.flattr-action',
