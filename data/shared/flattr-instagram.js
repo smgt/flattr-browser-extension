@@ -13,23 +13,6 @@
       selector: '.flattr-control',
       create: function(btnConfig) {
 
-        var flattrs = 0;
-
-        $.ajax({
-            url: 'https://api.flattr.com/rest/v2/things/lookup',
-            dataType: 'json',
-            data: {
-              url: window.location.href
-            },
-            success: function(data, status, xhr) {
-              if(data.flattrs) {
-                flattrs = data.flattrs;
-              } else {
-                flattrs = 0;
-              }
-            }
-        });
-
         var li = document.createElement("li");
         li.className = "flattr-control";
         li.style.margin = "2px 0 1px";
@@ -38,7 +21,7 @@
         var span = document.createElement('span');
         span.className = "count-badge flattr-count";
         span.style.color = "#fff";
-        span.innerHTML = flattrs;
+        span.innerHTML = 0;
         var b = document.createElement("b");
         b.innerHTML = btnConfig.text;
 
@@ -64,6 +47,19 @@
 
         li.appendChild(counter);
         li.appendChild(button);
+
+        $.ajax({
+            url: 'https://api.flattr.com/rest/v2/things/lookup',
+            dataType: 'json',
+            data: {
+              url: window.location.href
+            },
+            success: function(data, status, xhr) {
+              if(data.flattrs) {
+                span.innerHTML = data.flattrs;
+              }
+            }
+        });
 
         return li;
       },
