@@ -102,8 +102,9 @@ var Flattr = {
             e.preventDefault();
             var targetURL = getData(btn);
             if( targetURL ) {
-              targetURL = githubURL(targetURL);
+              targetURL = targetURL;
               console.log("Flattr URL: "+targetURL);
+              var port = chrome.extension.connect({name: "flattr"});
               port.postMessage({url: targetURL});
             } else {
               console.log("Error figuring out the Flattr URL");

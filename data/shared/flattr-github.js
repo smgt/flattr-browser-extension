@@ -64,7 +64,7 @@
       },
       data: function (elem) {
         var repo = $(elem).closest(".title-actions-bar").find(".js-current-repository");
-        return repo.attr("href");
+        return githubURL(repo.attr("href"));
       }
     },
     {
@@ -86,7 +86,7 @@
         return li;
       },
       data: function (elem) {
-        return window.location.href;
+        return githubURL(window.location.href);
       }
     }
   ];
