@@ -1,6 +1,6 @@
 {
   "name": "Flattr",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "manifest_version": 2,
   "description": "Displays Flattr buttons on services like Wikipedia, Twitter, Github  and other popular sites that do not have Flattr buttons visible yet.",
   "options_page": "data/chrome/options.html",
