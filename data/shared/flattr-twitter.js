@@ -199,49 +199,12 @@
 
   ];
 
-  var insertButtons = function() {
-    var i, l=buttons.length;
-    for( i=0 ; i < l; i++ ) {
-      var btnConfig = buttons[i];
-
-      $(btnConfig.container).each(function () {
-        var container = $(this);
-
-        if ( $(container).hasClass('flattr-inserted') ) return;
-
-        $(container).addClass('flattr-inserted');
-
-        var btn = btnConfig.create(btnConfig);
-
-        $(container).find(btnConfig.after).after(btn);
-
-        if ( !! btnConfig.activator) btnConfig.activator(btn, btnConfig);
-
-        var getData = btnConfig.data;
-        var clearData = btnConfig.clear;
-
-        var clearcb = function() {};
-
-        $(btn).click(function (e) {
-            e.preventDefault();
-            var url = getData(btn);
-            if( url ) {
-              console.log("Flattr URL: "+url);
-              port.postMessage({url: url});
-            } else {
-              console.log("Error figuring out the Flattr URL");
-            }
-        });
-      });
-    }
-  };
-
   var removeExtras = function() {
     $('.replies .flattr-tweet-button').remove();
   };
 
   var twitterLoop = function flattrTwitter() {
-    insertButtons();
+    Flattr.insertServiceButtons(buttons);
     removeExtras();
     setTimeout(flattrTwitter,500);
   };
@@ -249,7 +212,6 @@
   port.onMessage.addListener(function(msg) {
     if(msg.flattr_options) {
       if(msg.flattr_options['flattr.option.service-twitter'] === "service-twitter") {
-        console.log("Starting twitter loop");
         twitterLoop();
       }
     }

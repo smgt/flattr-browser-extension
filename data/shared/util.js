@@ -69,6 +69,48 @@ var Flattr = {
     }
 
     return baseURL + "?" + params.join("&");
+  },
+  insertServiceButtons: function(buttons) {
+    var i, l=buttons.length;
+    for( i=0 ; i < l; i++ ) {
+      var btnConfig = buttons[i];
+
+      $(btnConfig.container).each(function () {
+        var container = $(this);
+
+        if ( $(container).hasClass('flattr-inserted') ) return;
+
+        $(container).addClass('flattr-inserted');
+
+        var btn = btnConfig.create(btnConfig);
+
+        if(btnConfig.after) {
+          $(container).find(btnConfig.after).after(btn);
+        } else if (btnConfig.before) {
+          $(container).find(btnConfig.before).before(btn);
+        } else if (btnConfig.append) {
+          $(container).append(btn);
+        } else if (btnConfig.prepend) {
+          $(container).prepend(btn);
+        } else {
+          throw "You need to add your button to a element to make it visible"
+        }
+
+        var getData = btnConfig.data;
+
+        $(btn).click(function (e) {
+            e.preventDefault();
+            var targetURL = getData(btn);
+            if( targetURL ) {
+              targetURL = githubURL(targetURL);
+              console.log("Flattr URL: "+targetURL);
+              port.postMessage({url: targetURL});
+            } else {
+              console.log("Error figuring out the Flattr URL");
+            }
+        });
+      });
+    }
   }
 }
 
