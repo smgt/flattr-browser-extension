@@ -39,10 +39,12 @@
         a.setAttribute("href", "#");
 
         var i =  document.createElement("i");
-        i.setAttribute("class", "sm-fav");
+        i.setAttribute("class", "sm-embed");
         var imgURL = chrome.extension.getURL("/data/images/flattr-twitter-icons.png");
         $(i).css("backgroundImage", "url("+imgURL+")");
         $(i).css("backgroundPosition", "-6px -61px");
+        $(i).css("position", "relative");
+        $(i).css("top", "-1px");
         $(i).css("width", "13px");
         $(i).css("height", "13px");
 
@@ -171,10 +173,12 @@
         a.setAttribute("href", "#");
 
         var i =  document.createElement("i");
-        i.setAttribute("class", "sm-fav");
+        i.setAttribute("class", "sm-embed");
         var imgURL = chrome.extension.getURL("/data/images/flattr-twitter-icons.png");
         $(i).css("backgroundImage", "url("+imgURL+")");
         $(i).css("backgroundPosition", "-6px -30px");
+        $(i).css("top", "-1px");
+        $(i).css("position", "relative");
         $(i).css("width", "16px");
         $(i).css("height", "16px");
 
