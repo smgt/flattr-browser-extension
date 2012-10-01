@@ -1,14 +1,22 @@
 var tabs = {};
 
-// Enable all the options in localstorage
 if(!localStorage.getItem("flattr.options")) {
   localStorage.setItem("flattr.options", true);
-  $.get("options.html", function(data){
-    $("input[type=checkbox]", data).each(function(item) {
-      localStorage.setItem("flattr.option."+this.getAttribute("id"), this.getAttribute("id"));
-    });
-  });
 }
+
+// Enable all the options in localstorage if it's the first time
+// the extension is installed and enable new services per default.
+$.get("options.html", function(data) {
+  $("input[type=checkbox]", data).each(function(item) {
+    var serviceId = this.getAttribute("name");
+    var localStorageKey = "flattr.option."+serviceId;
+    if(localStorage.getItem(localStorageKey) === null) {
+      localStorage.setItem(localStorageKey, serviceId);
+    }
+  });
+});
+
+
 
 // Check if it's the first time the extension is run
 if(!localStorage.getItem("flattr.first_run")) {
