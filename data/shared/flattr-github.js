@@ -18,6 +18,13 @@
     }
   };
 
+  var githubIconsURL = chrome.extension.getURL("/data/images/flattr-github.png");
+  $('head').append("<style type='text/css'>"+
+     ".flattr-action .flattr-icon { background:url("+githubIconsURL+") no-repeat left center; display:inline-block; vertical-align: middle; width: 15px; height: 15px; margin-right:6px; opacity:1;}"+
+     ".flattr-action:hover .flattr-icon {background:url("+githubIconsURL+") no-repeat -18px center;}"+
+     "</style>");
+
+
   buttons = [
     {
       name: "repository",
@@ -32,7 +39,9 @@
         var a = document.createElement('a');
         a.setAttribute("class", btnConfig.className + " minibutton");
         a.setAttribute("href", "#");
-        a.innerHTML = btnConfig.text;
+        var i = document.createElement('i');
+        i.setAttribute("class", "flattr-icon");
+        a.innerHTML = i.outerHTML + btnConfig.text;
 
         $(li).append(a);
 
@@ -68,22 +77,25 @@
       }
     },
     {
-      name: "repository",
+      name: "user",
       text: "Flattr",
-      container: "body:not(.org-profile) .pagehead.userpage .pagehead-actions",
-      append: true,
+      container: ".profilecols .tabnav .tabnav-right",
+      after: ".user-following-container",
       className: 'flattr-action',
       selector: '.flattr-action',
       create: function(btnConfig) {
-        var li = document.createElement("li");
+        var span = document.createElement("span");
 
         var a = document.createElement('a');
-        a.setAttribute("class", btnConfig.className + " minibutton tabnav-widget");
+        a.setAttribute("class", btnConfig.className + " tabnav-widget minibutton");
         a.setAttribute("href", "#");
-        a.innerHTML = btnConfig.text;
+        a.style.marginLeft = "4px";
+        var i = document.createElement('i');
+        i.setAttribute("class", "flattr-icon");
+        a.innerHTML = i.outerHTML + btnConfig.text;
 
-        $(li).append(a);
-        return li;
+        $(span).append(a);
+        return span;
       },
       data: function (elem) {
         return githubURL(window.location.href);

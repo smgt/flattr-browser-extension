@@ -48,5 +48,5 @@
       "title" : "Share link to Flattr"
     }
   },
-  "web_accessible_resources": ["data/images/flattr-twitter-icons.png", "data/images/flattr-instagram.png"]
+  "web_accessible_resources": ["data/images/flattr-twitter-icons.png", "data/images/flattr-instagram.png", "data/images/flattr-github.png"]
 }
